@@ -2,7 +2,7 @@ import {cart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 
-let cartSummaryHTML;
+let cartSummaryHTML = '';
 
 cart.forEach((cartItem, radioNumber) => {
 	let mathingProduct
