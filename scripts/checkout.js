@@ -5,7 +5,7 @@ import {formatCurrency} from './utils/money.js';
 let cartSummaryHTML = '';
 
 cart.forEach((cartItem, radioNumber) => {
-	let mathingProduct
+	let mathingProduct;
 
 	products.forEach((product) => {
 		if (product.id === cartItem.id) {
