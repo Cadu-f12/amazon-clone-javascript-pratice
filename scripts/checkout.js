@@ -1,6 +1,8 @@
-import {cart, removeFromCart} from '../data/cart.js';
+import {cart, removeFromCart, updateCartHTML, updateQuantity, updateProductQuantityHTML} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
+
+updateCartHTML();
 
 let cartSummaryHTML = '';
 
@@ -34,9 +36,13 @@ cart.forEach((cartItem, radioNumber) => {
 						<span>
 							Quantity: <span class="quantity-label">${cartItem.quantity}</span>
 						</span>
-						<span class="update-quantity-link link-primary">
+						<span class="update-quantity-link link-primary " data-product-id="${mathingProduct.id}">
 							Update
 						</span>
+						<input class="quantity-input">
+							<span class="save-quantity-link link-primary" data-product-id="${mathingProduct.id}">
+							Save
+							</span>
 						<span class="delete-quantity-link link-primary" data-product-id="${mathingProduct.id}">
 							Delete
 						</span>
@@ -92,6 +98,7 @@ cart.forEach((cartItem, radioNumber) => {
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
+// Delete button click listener
 document.querySelectorAll('.delete-quantity-link').forEach((deleteObject) => {
 	deleteObject.addEventListener('click', () => {
 		const {productId} = deleteObject.dataset;
@@ -100,5 +107,36 @@ document.querySelectorAll('.delete-quantity-link').forEach((deleteObject) => {
 		removeFromCart(productId);
 		
 		deletedObject.remove();
+
+		updateCartHTML();
 	});
 });
+
+// Update button click listener
+document.querySelectorAll('.update-quantity-link').forEach((updateObject) => {
+	updateObject.addEventListener('click', () => {
+		const {productId} = updateObject.dataset;
+		const cartItemContainerElem = document.querySelector('.cart-item-container');
+		const inputQuantityElem = document.querySelector('.quantity-input');
+		const saveButtonElement = document.querySelector('.save-quantity-link');
+		
+		cartItemContainerElem.classList.add('is-editing-quantity');
+	});
+});
+// Save button click listener
+document.querySelectorAll('.save-quantity-link').forEach((saveObject) => {
+	saveObject.addEventListener('click', () => {
+		const {productId} = saveObject.dataset;
+		const cartItemContainerElem = document.querySelector('.cart-item-container');
+		const inputQuantityElem = document.querySelector('.quantity-input');
+		
+		const newQuantity = Number(inputQuantityElem.value);
+
+		updateQuantity(productId, newQuantity);
+
+		cartItemContainerElem.classList.remove('is-editing-quantity');
+
+		updateCartHTML();
+		updateProductQuantityHTML(productId);
+	});
+})

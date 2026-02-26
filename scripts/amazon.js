@@ -1,10 +1,12 @@
-import { cart, addToCart, updateCart, getQuantity } from '../data/cart.js'
+import { addToCart, updateCartHTML, getQuantity } from '../data/cart.js'
 import { products } from '../data/products.js'; 
 import { formatCurrency } from './utils/money.js';
 
 let productsHTML = '';
 let isAdded = false;
 let timeOutId;
+
+updateCartHTML();
 
 products.forEach((product) => {
     productsHTML += `
@@ -60,6 +62,23 @@ products.forEach((product) => {
     `;
 });
 
+document.querySelector('.products-grid').innerHTML = productsHTML;
+
+document.querySelectorAll('.js-add-to-cart').forEach((addButton) => {
+    addButton.addEventListener('click', () => {
+        const { productId } = addButton.dataset;  
+
+        const quantity = getQuantity(productId);
+        
+        addToCart(productId, quantity);
+        
+        displayAddedMessage(productId);
+
+        updateCartHTML();
+    })
+});
+
+// Added message
 function displayAddedMessage(productId) {
   const addedMessageElem = document.querySelector(`.js-added-menssage-${productId}`);
 
@@ -82,19 +101,3 @@ function displayAddedMessage(productId) {
 
   addedMessageElem.classList.add(`added-message`);
 }
-
-document.querySelector('.products-grid').innerHTML = productsHTML;
-
-document.querySelectorAll('.js-add-to-cart').forEach((addButton) => {
-    addButton.addEventListener('click', () => {
-        const { productId } = addButton.dataset;  
-
-        const quantity = getQuantity(productId);
-        
-        addToCart(productId, quantity);
-        
-        displayAddedMessage(productId);
-
-        updateCart();
-    })
-});
