@@ -1,4 +1,4 @@
-import {cart, removeFromCart, updateCartHTML, updateQuantity, updateProductQuantityHTML} from '../data/cart.js';
+import {cart, removeFromCart, setQuantity, updateCartHTML, updateQuantityLabelHTML} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 
@@ -6,7 +6,7 @@ updateCartHTML();
 
 let cartSummaryHTML = '';
 
-cart.forEach((cartItem, radioNumber) => {
+cart.forEach((cartItem, index) => {
 	let mathingProduct;
 
 	products.forEach((product) => {
@@ -22,9 +22,7 @@ cart.forEach((cartItem, radioNumber) => {
 			</div>
 
 			<div class="cart-item-details-grid">
-				<img class="product-image"
-					src="${mathingProduct.image}">
-
+				<img class="product-image" src="${mathingProduct.image}">
 				<div class="cart-item-details">
 					<div class="product-name">
 						${mathingProduct.name}
@@ -34,15 +32,15 @@ cart.forEach((cartItem, radioNumber) => {
 					</div>
 					<div class="product-quantity">
 						<span>
-							Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+							Quantity: <span class="quantity-label js-quantity-label-${mathingProduct.id}">${cartItem.quantity}</span>
 						</span>
-						<span class="update-quantity-link link-primary " data-product-id="${mathingProduct.id}">
+						<span class="update-quantity-link link-primary" data-product-id="${mathingProduct.id}">
 							Update
 						</span>
-						<input class="quantity-input">
-							<span class="save-quantity-link link-primary" data-product-id="${mathingProduct.id}">
+						<input class="quantity-input js-quantity-input-${mathingProduct.id}" value="0">
+						<span class="save-quantity-link link-primary" data-product-id="${mathingProduct.id}">
 							Save
-							</span>
+						</span>
 						<span class="delete-quantity-link link-primary" data-product-id="${mathingProduct.id}">
 							Delete
 						</span>
@@ -56,7 +54,7 @@ cart.forEach((cartItem, radioNumber) => {
 
 					<div class="delivery-option">
 						<input type="radio" class="delivery-option-input"
-							name="delivery-option-${radioNumber}">
+							name="delivery-option-${index}">
 						<div>
 							<div class="delivery-option-date">
 								Tuesday, June 21
@@ -68,7 +66,7 @@ cart.forEach((cartItem, radioNumber) => {
 					</div>
 					<div class="delivery-option">
 						<input type="radio" checked class="delivery-option-input"
-							name="delivery-option-${radioNumber}">
+							name="delivery-option-${index}">
 						<div>
 							<div class="delivery-option-date">
 								Wednesday, June 15
@@ -80,7 +78,7 @@ cart.forEach((cartItem, radioNumber) => {
 					</div>
 					<div class="delivery-option">
 						<input type="radio" class="delivery-option-input"
-							name="delivery-option-${radioNumber}">
+							name="delivery-option-${index}">
 						<div>
 							<div class="delivery-option-date">
 								Monday, June 13
@@ -100,43 +98,57 @@ document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
 // Delete button click listener
 document.querySelectorAll('.delete-quantity-link').forEach((deleteObject) => {
-	deleteObject.addEventListener('click', () => {
-		const {productId} = deleteObject.dataset;
-		const deletedObject = document.querySelector(`.js-cart-item-container-${productId}`);
-
-		removeFromCart(productId);
-		
-		deletedObject.remove();
-
-		updateCartHTML();
-	});
+	deleteObject.addEventListener('click', () => deleteContainer(deleteObject));
 });
 
 // Update button click listener
 document.querySelectorAll('.update-quantity-link').forEach((updateObject) => {
-	updateObject.addEventListener('click', () => {
-		const {productId} = updateObject.dataset;
-		const cartItemContainerElem = document.querySelector('.cart-item-container');
-		const inputQuantityElem = document.querySelector('.quantity-input');
-		const saveButtonElement = document.querySelector('.save-quantity-link');
-		
-		cartItemContainerElem.classList.add('is-editing-quantity');
-	});
+	updateObject.addEventListener('click', () => showInput(updateObject));
 });
+
 // Save button click listener
 document.querySelectorAll('.save-quantity-link').forEach((saveObject) => {
-	saveObject.addEventListener('click', () => {
-		const {productId} = saveObject.dataset;
-		const cartItemContainerElem = document.querySelector('.cart-item-container');
-		const inputQuantityElem = document.querySelector('.quantity-input');
-		
-		const newQuantity = Number(inputQuantityElem.value);
+	saveObject.addEventListener('click', () => saveQuantity(saveObject));
+});
 
-		updateQuantity(productId, newQuantity);
+function validateQuantity(inputValue, productId) {
+	const value = Number(inputValue);
 
-		cartItemContainerElem.classList.remove('is-editing-quantity');
+	if (value < 0) {
+		return 0;
+	}
 
-		updateCartHTML();
-		updateProductQuantityHTML(productId);
-	});
-})
+	return value;
+}
+
+// Update and delete buttons functions
+function saveQuantity(object) {
+	const {productId} = object.dataset;
+	const cartItemContainerElem = document.querySelector(`.js-cart-item-container-${productId}`);
+	const inputQuantityElem = document.querySelector(`.js-quantity-input-${productId}`);
+	
+	setQuantity(productId, validateQuantity(inputQuantityElem.value));
+	
+	inputQuantityElem.value = 0;
+	
+	cartItemContainerElem.classList.remove('is-editing-quantity');
+	
+	updateCartHTML();
+	updateQuantityLabelHTML(productId);
+}
+function deleteContainer(object) {
+	const {productId} = object.dataset;
+	const containerObject = document.querySelector(`.js-cart-item-container-${productId}`);
+
+	removeFromCart(productId);
+	
+	containerObject.remove();
+
+	updateCartHTML();
+}
+function showInput(object) {
+	const {productId} = object.dataset;
+	const cartItemContainerElem = document.querySelector(`.js-cart-item-container-${productId}`);
+
+	cartItemContainerElem.classList.add('is-editing-quantity');
+}
