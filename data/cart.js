@@ -82,6 +82,20 @@ export function updateQuantityLabelHTML(productId) {
   quantityLabelElem.innerHTML = getQuantity(productId);
 }
 
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  let mathingItem;
+
+  cart.forEach((item) => {
+    if (productId === item.id) {
+      mathingItem = item;
+    }
+  });
+
+  mathingItem.deliveryOptionId = deliveryOptionId;
+
+  saveToLocalStorage();
+}
+
 export function captureSelectorQuantity(productId) {
   const selectorElem = document.querySelector(`.js-quantity-selector-${productId}`);
 

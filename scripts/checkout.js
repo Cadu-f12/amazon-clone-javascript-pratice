@@ -1,4 +1,4 @@
-import {cart, removeFromCart, setQuantity, updateCartHTML, updateQuantityLabelHTML} from '../data/cart.js';
+import {cart, removeFromCart, setQuantity, updateCartHTML, updateDeliveryOption, updateQuantityLabelHTML} from '../data/cart.js';
 import {products} from '../data/products.js';
 import formatCurrency from './utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
@@ -90,7 +90,9 @@ function deliveryOptionHTML(i, cartItem) {
 		const isChecked = cartItem.deliveryOptionId === deliveryOption.id;
 
 		html += `
-		<div class="delivery-option">
+		<div class="delivery-option js-delivery-option"
+		data-product-id="${cartItem.id}"
+		data-delivery-option-id="${deliveryOption.id}">
 			<input type="radio"
 			${isChecked ? 'checked' : ''}
 			 class="delivery-option-input"
@@ -109,6 +111,14 @@ function deliveryOptionHTML(i, cartItem) {
 
 	return html;
 }
+
+document.querySelectorAll('.js-delivery-option').forEach((element) => {
+	element.addEventListener('click', () => {
+		const {productId, deliveryOptionId} = element.dataset;
+
+		updateDeliveryOption(productId, deliveryOptionId);
+	});
+});
 
 // Delete button click listener
 document.querySelectorAll('.delete-quantity-link').forEach((deleteObject) => {
