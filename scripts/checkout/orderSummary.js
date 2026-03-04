@@ -3,6 +3,7 @@ import {getProductById} from '../../data/products.js';
 import formatCurrency from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {deliveryOption, getDeliveryOption} from '../../data/deliveryOptions.js';
+import {renderPaymentSummary} from './paymentSummary.js'; 
 
 export function renderOrderSummary() {
     updateCartHTML();
@@ -106,6 +107,8 @@ export function renderOrderSummary() {
             updateDeliveryOption(productId, deliveryOptionId);
 
             renderOrderSummary();
+
+            renderPaymentSummary();
         });
     });
 
@@ -124,7 +127,7 @@ export function renderOrderSummary() {
         saveObject.addEventListener('click', () => saveQuantity(saveObject));
     });
 
-    function validateQuantity(inputValue, productId) {
+    function validateQuantity(inputValue) {
         const value = Number(inputValue);
 
         if (value < 0) {
@@ -148,6 +151,7 @@ export function renderOrderSummary() {
         
         updateCartHTML();
         updateQuantityLabelHTML(productId);
+        renderPaymentSummary();
     }
     function deleteContainer(object) {
         const {productId} = object.dataset;
@@ -158,6 +162,7 @@ export function renderOrderSummary() {
         containerObject.remove();
 
         updateCartHTML();
+        renderPaymentSummary();
     }
     function showInput(object) {
         const {productId} = object.dataset;
