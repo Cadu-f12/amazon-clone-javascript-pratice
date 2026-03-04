@@ -1,12 +1,12 @@
+import renderPaymentSummary from './paymentSummary.js'; 
+import renderCheckoutHeader from './checkout-header.js';
 import {cart, removeFromCart, setQuantity, updateDeliveryOption, updateQuantityLabelHTML} from '../../data/cart.js';
 import {getProductById} from '../../data/products.js';
 import formatCurrency from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {deliveryOption, getDeliveryOption} from '../../data/deliveryOptions.js';
-import {renderPaymentSummary} from './paymentSummary.js'; 
-import {renderCheckoutHeader} from './checkout-header.js';
 
-export function renderOrderSummary() {
+export default function renderOrderSummary() {
     let cartSummaryHTML = '';
 
     cart.forEach((cartItem, index) => {

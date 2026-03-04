@@ -1,6 +1,6 @@
 import {calculateCartQuantity} from '../../data/cart.js';
 
-export function renderCheckoutHeader() {
+export default function renderCheckoutHeader() {
     const totalCartQuantity = calculateCartQuantity();
 
     let html =
