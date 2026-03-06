@@ -9,3 +9,5 @@ describe('test suite: formatCurrency', () => {
         expect(formatCurrency(0)).toEqual('0.00');
     });
 });
+
+// We use expect() if the function returns something.
