@@ -16,7 +16,9 @@ export default function renderOrderSummary() {
         const deliveryString = calculateDeliveryDate(deliveryRadioOption);
 
         cartSummaryHTML += `
-            <div class="cart-item-container js-cart-item-container-${mathingProduct.id}">
+            <div class="cart-item-container
+            js-cart-item-container
+            js-cart-item-container-${mathingProduct.id}">
                 <div class="delivery-date">
                     Delivery date: ${deliveryString}
                 </div>
@@ -30,7 +32,8 @@ export default function renderOrderSummary() {
                         <div class="product-price">
                             $${formatCurrency(mathingProduct.priceCents)}
                         </div>
-                        <div class="product-quantity">
+                        <div class="product-quantity
+                        js-product-quantity-${mathingProduct.id}">
                             <span>
                                 Quantity: <span class="quantity-label js-quantity-label-${mathingProduct.id}">${cartItem.quantity}</span>
                             </span>
