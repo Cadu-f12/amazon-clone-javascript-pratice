@@ -44,7 +44,8 @@ export default function renderOrderSummary() {
                             <span class="save-quantity-link link-primary" data-product-id="${mathingProduct.id}">
                                 Save
                             </span>
-                            <span class="delete-quantity-link link-primary" data-product-id="${mathingProduct.id}">
+                            <span class="delete-quantity-link link-primary
+                            js-delete-link-${mathingProduct.id}" data-product-id="${mathingProduct.id}">
                                 Delete
                             </span>
                         </div>
