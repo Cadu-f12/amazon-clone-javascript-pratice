@@ -41,14 +41,34 @@ describe('test suite: renderOrderSummary', () => {
     });
 
     it('displays the cart', () => {
-    
-        expect(document.querySelectorAll('.js-cart-item-container').length).toEqual(2);
-        expect(document.querySelector(`.js-product-quantity-${productId1}`).innerText).toContain('Quantity: 1');
-        expect(document.querySelector(`.js-product-quantity-${productId2}`).innerText).toContain('Quantity: 2');
+        const productName1 = document.querySelector(`.js-product-name-${productId1}`).innerText;
+        const productName2 = document.querySelector(`.js-product-name-${productId2}`).innerText;
+        const priceProduct1 = document.querySelector(`.js-product-price-${productId1}`).innerText;
+        const priceProduct2 = document.querySelector(`.js-product-price-${productId2}`).innerText;
 
+        expect(productName1).
+            toEqual("Black and Gray Athletic Cotton Socks - 6 Pairs");
+        
+        expect(productName2).
+            toEqual("Intermediate Size Basketball");
+        
+        expect(priceProduct1).
+            toContain("$");
+        
+        expect(priceProduct2).
+            toContain("$");
+
+        expect(document.querySelectorAll('.js-cart-item-container').length).
+            toEqual(2);
+        
+        expect(document.querySelector(`.js-product-quantity-${productId1}`).innerText).
+            toContain('Quantity: 1');
+        
+        expect(document.querySelector(`.js-product-quantity-${productId2}`).innerText).
+            toContain('Quantity: 2');
     });
 
-    it(`removes from cart`, () => {
+    it('removes from cart', () => {
         
         document.querySelector(`.js-delete-link-${productId1}`).click();
         
@@ -63,6 +83,19 @@ describe('test suite: renderOrderSummary', () => {
         expect(cart.length).toEqual(1);
 
         expect(cart[0].id).toEqual(productId2);
-
     });
+
+    it('Update delivery option', () => {
+        const deliveryOptionElement = document.
+            querySelector(`.js-delivery-option-${productId1}-${'3'}`);
+        const deliveryOptionInput = document.
+        querySelector(`.js-delivery-option-input-${productId1}-${'3'}`);
+            
+        deliveryOptionInput.click();
+
+        expect(deliveryOptionInput.checked).toEqual(true);
+        expect(cart.length).toEqual(2);
+        expect(cart[0].deliveryOptionId).toEqual('3');
+        expect()
+    })
 })
