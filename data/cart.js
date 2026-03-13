@@ -79,12 +79,18 @@ export function updateQuantityLabelHTML(productId) {
 
 export function updateDeliveryOption(productId, deliveryOptionId) {
   let mathingItem;
-
   cart.forEach((item) => {
     if (productId === item.id) {
       mathingItem = item;
     }
   });
+
+  if (mathingItem === undefined) {
+    return;
+  }
+  if (deliveryOptionId !== '1' & deliveryOptionId !== '2' & deliveryOptionId !== '3') {
+    return;
+  }
 
   mathingItem.deliveryOptionId = deliveryOptionId;
 

@@ -96,6 +96,6 @@ describe('test suite: renderOrderSummary', () => {
         expect(deliveryOptionInput.checked).toEqual(true);
         expect(cart.length).toEqual(2);
         expect(cart[0].deliveryOptionId).toEqual('3');
-        expect()
+        expect(document.querySelector('.js-total-price').innerText).toEqual('$74.56');
     })
 })
